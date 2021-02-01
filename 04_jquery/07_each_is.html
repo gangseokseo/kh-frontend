@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>each is</title>
+    <script src="js/jquery-3.5.1.js"></script>
+</head>
+<body>
+    <h1>each</h1>
+    <h2>$.each</h2> <!--자바스크립트 each--> <!--js배역,js객체를 통제하기위해서 제이쿼리랑 다름-->
+    <input type="button" value="js배열" id="btn1">
+    <input type="button" value="js객체" id="btn2">
+    <script>
+    /**
+     * js객체 모든 속성 순회            속성, 속성값
+     * $.each(obj(객체),콜백함수function(key,value){})
+     */
+    $(btn2).on('click',function(){
+        var obj= {
+            name : "홍길동", //key, value 
+            phone : "01012341234",
+            age : 30,
+            married : true,
+            say : function(){
+                console.log(this.name + "!!!");
+            }
+        };
+        $.each(obj, function(k, v){
+            console.log(k, v);
+        });
+    });
+    /**
+     * js배열을 순회        인덱스, 요소
+     * $.each(arr, function(index,elem){})
+     */
+     $(btn1).on('click', function(){
+    var arr = ['홍길동', '신사임당', '이순신', '세종대왕'];
+
+    $.each(arr, function(index,elem){//for..in문 대신 쓰인 $.each
+        console.log(index, elem);//,(콤마) 구분자로 출력할 요소 전달가능
+       });
+
+    });
+    </script>
+    
+    <h2>$(selector).each</h2><!--jquery 객체용 each-->
+    <input type="button" value="실행" id="btn3">
+    <div class="wrap">
+        <p>테스트1</p>
+        <p>테스트2</p>
+        <p>테스트3</p>
+    </div>
+    <script>
+    /**
+     * jquery객체 요소에 대한 순회 메소드
+     * 
+     */
+     $(btn3).click(function(){  //인덱스, 요소
+        $(".wrap p").each(function(i, elem){
+            console.log(i,elem);
+            //each callbackFunction안의 this는 elem객체를 가리킨다.
+            // console.log(this);
+            // console.log(elem === this);//true
+
+            //js태그엘레먼트 -> jquery객체로 만들기
+            //elem에대해서 객체작성=>$(elem) jquery 객체로 만든다음 css이용 =>테스트,1,2,3
+            $(elem).css("text-decoration", "underline");
+        });
+     });
+    </script>
+
+    <h1>class제어</h1> <!--클래스 관련 메소드란거죠 걍-->
+    <div class="container">
+        <p class="font">아이템1</p>
+        <p class="bg">아이템2</p>
+        <p>아이템3</p>
+        <p>아이템4</p>
+        <p>아이템5</p>
+    </div>
+    <input type="button" value="addClass" id="btn4">
+    <input type="button" value="removeClass" id="btn5">
+    <input type="button" value="toggleClass" id="btn6">
+    <style>
+    .font{
+        font-family: "궁서", cursive;
+    }
+    .bg {
+        background-color: hotpink;
+    }
+    </style>
+    <script>  
+    $(btn6).click(function(){     //(btn5)
+        $(".container p")
+            .toggleClass("font"); //.removeClass("font");
+    });  
+    $(btn4).click(function(){
+        $(".container p")
+            .addClass("font")//나머지 궁서체로 바꾸기 
+            .addClass("bg");
+    });
+    </script>
+    
+    <div class="wrap"> 
+        <h1>안녕1</h1>
+        <h1>안녕2</h1>
+        <h1>안녕3</h1>
+        <h1>안녕4</h1>
+        <h1>안녕5</h1>
+    </div>
+    <style>
+    .wrap h1 {
+        display: inline-block;
+        margin-right: 15px;
+    }
+    .c1{color: red;}
+    .c2{color: orange;}
+    .c3{color: yellow;}
+    .c4{color: green;}
+    .c5{color: blue;}
+    </style>
+    <script>
+    /**
+     * 실습문제
+     * 각 순서에 맞는 클래스값이 사용자가 클릭할때마다 (각자 따로 toggle?)
+     * 추가/제거 될 수 있도록 핸들러를 한번에 추가하세요.(안녕1클릭 =>c1작동)
+     * 
+     * each로 wrap h1 순회하다가 요소에 클릭했을떄 토글 함수가 실행된다? 
+     * each가 for in문이니깐 배열을 돈다는거구
+     * this가 elem맞을꺼에요
+     */
+    
+     $(".wrap h1").each(function(i, elem){//elem =>요소 h1
+        
+        //이벤트핸들러 안에서 this는 이벤트발생객체다. 중요!!
+        $(elem).click(function(e){// $(elem) jquery객체만들기 , 각각click function 만들기,안에 e는  e.target쓰면 써라 
+           //this, e.target 클릭이 일어난 이벤트 발생객체
+            $(this).toggleClass("c" + (i + 1));
+        });
+    });
+
+    </script>
+
+    <h1>is</h1>
+    <div class="wrapper">
+        <h2>test1</h2>
+        <h3 class="check">test2</h3>
+        <h2 class="check">test3</h2>
+        <h3>test4</h3>
+    </div>
+    <input type="button" value="실행" id="btn7">
+    <script>
+    /**
+     * is(selector):boolean
+     *  현재요소가 selector와 일치 여부
+     */ 
+    $(btn7).click(function(){//.wrapper * 래퍼 하위 모든요소
+        $(".wrapper *").each(function(i,elem){
+            //this안하고 elem이라고도해도됨
+            //console.log(this,$(this).is(".check"))//h2가 맞는냐?.check가 맞느냐? 등등
+            
+            //h2이면서 .check클래스일경우(문제)
+            //color: white, background-color:?
+            if($(this).is("h2.check")){
+                $(this).css({
+                    "color" : "white",
+                    "background-color" : "seagreen"
+                });
+            }
+/**다른방법
+ *$(".wrapper h2").each(function(i, elem){
+                if($(this).is(".check")){
+                    $(this)
+                        .css('color','white')
+                        .css('background-color','blue');
+                }
+ }); 
+ * 
+ */
+    
+        });
+     });
+    </script>
+
+    <hr>
+    <!--체크박에서 is사용법-->
+    <!-- (input:checkbox[name=fruit][value=fruit$]#fruit$+label[for=fruit$])*3 -->
+    <input type="checkbox" name="fruit" id="fruit1" value="사과">
+    <label for="fruit1">사과</label>
+    <input type="checkbox" name="fruit" id="fruit2" value="딸기">
+    <label for="fruit2">딸기</label>
+    <input type="checkbox" name="fruit" id="fruit3" value="키위">
+    <label for="fruit3">키위</label>
+    <input type="button" value="확인" id="btn8">
+    <script>
+    $(btn8).click(function(){
+        $("[name=fruit]").each(function(i, elem){
+          if($(elem).is(":checked")){//요소가 체크되었다면 :checked
+            console.log($(elem).val()) //값은 무엇인가?
+          }
+        });
+    });
+    </script>
+
+
+
+
+
+
+
+  
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</body>
+</html>

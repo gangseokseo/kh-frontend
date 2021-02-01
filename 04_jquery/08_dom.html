@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM</title>
+    <!--DOM제어하기 jquery의 좋은기능-->
+    <!--javascript나 jquery로 동적으로 제어하는 방식인거같네여-->
+    <script src="js/jquery-3.5.1.js"></script>
+    <style>
+        .area {
+          background-color: lightskyblue;
+          border: 2px solid black;
+          padding: 5px;
+          margin: 10px;
+          min-height: 50px;
+        }
+        .add {
+            color: teal;
+        }
+        /*clone | remove | detach | empty*/
+        .original,.result {
+            border: 1px solid gray;
+            padding: 5px;
+            margin: 10px 0;
+        } 
+        .item {
+            width: 100px; 
+            height: 100px;
+            display: inline-block;
+            border: 1px solid #000;
+        }
+        .lime {
+            background-color: lime;
+        }
+        </style>
+</head>
+<body>
+    <h1>DOM</h1>
+    <h2>요소추가</h2>
+    <input type="button" value="실행" id="btn1">
+    <div class="area" id="area1"></div>
+    <script>
+    $(btn1).click(function(){
+        //html,append차이 새로쓰느냐 뒤에 붙여쓰느냐 ?, 주로 많이쓰임 1,2번
+    //1. 
+      var $area1 = $(area1); //변수에다 빼놓기
+      $area1.html("<p>안녕</p>");//문자열 추가
+    
+      //2.
+      var $p = $("<p>여보세요</p>");//메모리상에서만 존재하는 jquery객체
+      $area1.append($p);//append는 기존요소 뒤에다 덧붙이는거 
+
+      //3.
+      //자바스크립트객체
+      var pElem = document.createElement("p");
+      //텍스트노드 추가
+      pElem.appendChild(document.createTextNode("ㅋㅋㅋ"));
+      $area1.append(pElem);//js태그객체 추가
+    });
+    </script>
+
+    <!--삽입1,2 차이점 무엇이 주체에따라 다르다.appendTo, append  $(test)로 받느냐 add로 받느냐차이-->
+    <h2>삽입1</h2>
+    <p>추가할 요소 기준으로 메소드 호출</p>
+    <input type="button" value="appendTo" id="btn2">
+    <input type="button" value="prependTo" id="btn3">
+    <input type="button" value="insertAfter" id="btn4">
+    <input type="button" value="insertBefore" id="btn5">
+    <br>
+    <!-- (h1#test$>span{A})*4  밑에 test 5,6,7,8있다-->
+    <h1 id="test1"><span>A</span></h1>
+    <h1 id="test2"><span>A</span></h1>
+    <h1 id="test3"><span>A</span></h1>
+    <hr>
+    <h1 id="test4"><span>A</span></h1>
+    <script>
+    /**
+    * $(B).insertBefore($(A))
+    *    B를 A의 형제요소로 앞에 추가
+    * 밑에쪼그맣게 나오면 BCDE~
+    */ 
+    (function(){
+        var code = 66;
+        $(btn5).click(function(){
+            var $add = $("<span class='add'>" + String.fromCharCode(code++) + "</span>");
+            $add.insertBefore($(test4));
+        });
+    })();    
+    /**
+    * $(B).insertAfter($(A))
+    *    B를 A의 형제요소로 뒤에 추가
+    * 밑에 쪼그맣게 나오면서 뒤로~EDCB
+    *                     
+    */ 
+   (function(){
+        var code = 66;
+        $(btn4).click(function(){
+          var $add = $("<span class='add'>" + String.fromCharCode(code++) + "</span>");
+          $add.insertAfter($(test3));
+        });
+    })();    
+    
+    /**
+    * $(B).prependTo($(A))
+    *    B를 A의 자식요소로 처음에 추가. 기존요소 앞
+    */ 
+    (function(){
+        var code = 66;
+        $(btn3).click(function(){
+            var $add = $("<span class='add'>" + String.fromCharCode(code++) + "</span>");
+            $add.prependTo($(test2));
+        });
+    })();
+    /**
+     * $(B).appendTo($(A))
+     *  B를 A의 자식요소로 마지막에 추가.기존요소 뒤
+     * A를 기준으로 뒤로 B,C,D가 추가할요소기준으로 메소드호출
+     * 
+     */
+  (function(){//익명함수 선언과동시에 실행(즉시실행함수)
+    var code = 66;//B //변수하나 만듬 . 아스키코드값 문자로 전환하기 위해 전달 =>메모장에 설명있음
+    $(btn2).click(function(){
+        //String.fromCharCode : ascii code를 문자로 변환
+      var $add = $("<span class='add'>" + String.fromCharCode(code++) + "</span>");//jquery객체만듬
+      $add.appendTo($(test1));
+    });
+  })();
+
+    </script>
+
+    <h2>삽입2</h2>
+    <p>기준 요소 기준으로 메소드 호출</p>
+    <input type="button" value="append" id="btn6">
+    <input type="button" value="prepend" id="btn7">
+    <input type="button" value="after" id="btn8">
+     <input type="button" value="before" id="btn9">
+    
+    <!-- (h1#test>span{A})*4 -->
+    <h1 id="test5"><span>A</span></h1>
+    <h1 id="test6"><span>A</span></h1>
+    <h1 id="test7"><span>A</span></h1>
+    <hr>
+    <h1 id="test8"><span>A</span></h1>
+
+    <script>
+    /**
+     * 
+    * $(A).before(B)
+    *    A의 형제요소로 B를 이전에 추가
+    */ 
+    (function(){
+      var code = 66;
+      $(btn9).click(function(){
+        var add = "<span class='add'>" + String.fromCharCode(code++) + "</span>";
+        $(test8).before(add);//add문자열 근데 $넣은 제이쿼리객체도 가능
+      });
+    })();
+
+    /**
+    * $(A).after(B)
+    *    A의 형제요소로 B를 다음에 추가
+    */ 
+    (function(){
+      var code = 66;
+      $(btn8).click(function(){
+        var add = "<span class='add'>" + String.fromCharCode(code++) + "</span>";
+        $(test7).after(add);
+      });
+    })();    
+    /**
+     * 
+   * $(A).prepend(B)
+   *    A의 자식요소로 B를 처음에 추가
+   */ 
+   (function(){
+     var code = 66;
+     $(btn7).click(function(){
+        var add = "<span class='add'>" + String.fromCharCode(code++) + "</span>";
+        $(test6).prepend(add);
+     });
+   })();
+    
+
+    /**
+     * $(A).append($(B))
+     *    A의 자식요소로 B를 마지막에 추가 , 기존요소다음에 들어옴
+     */ 
+    (function(){
+      var code = 66;
+      $(btn6).click(function(){
+          //jquery객체가 아니고 add 왜?
+        var add = "<span class='add'>" + String.fromCharCode(code++) + "</span>";
+        $(test5).append(add);
+      });
+    })();  
+    </script>
+
+    <h2>clone | remove | detach | empty</h2>
+    <!--@10 초기값지정-->
+    <!-- input:button#btn$@10*4 -->
+    <input type="button" value="clone" id="btn10">
+    <input type="button" value="remove" id="btn11">
+    <input type="button" value="detach" id="btn12">
+    <input type="button" value="empty" id="btn13">
+
+    <div class="original">
+        <div class="item"></div>
+    </div>
+    <div class="result"></div>
+
+    <script>
+    /**
+     * empty 
+     *  모든 자식요소를 제거
+     */ 
+    $(btn13).click(function(){
+      $(".original, .result").empty();
+    });
+
+    /**
+     * detach
+     * 삭제 : 삭제된 요소를 리턴. 이벤트 핸들링이 유지됨. 
+    */
+     $(btn12).click(function(){
+       $(".item")
+        .detach()
+        .appendTo($(".result"))
+    });
+
+    /**
+    * remove
+    * 삭제 : 삭제된 요소를 리턴. 이벤트 핸들링은 제거됨. 더이상 마우스왔다갔다해도 색깔 안됨 
+    */
+    $(btn11).click(function(){
+      $(".item")
+        .remove()
+        .appendTo($(".result"));
+    });
+
+
+
+    $(".item").hover(function(){
+        //mouseenter
+        $(this).toggleClass("lime");//토글 마우스 들어갔을때
+    }, function(){
+        //mouseleave  
+        $(this).toggleClass("lime");  //나올때
+    });
+
+     /**
+     * clone(eventHandling) 
+     * 요소복제. 이벤트핸들링까지 복사할지 여부. 기본값 false
+     */ 
+     $(btn10).click(function(){
+        var $copy = $(".item:eq(0)").clone(true); //true안에색깔까지구현가능  //:eq(0) 하나씩하고싶으면 이렇게걸어라
+        $copy.appendTo($(".result"));
+    });
+    </script>
+
+
+    
+</body>
+</html>

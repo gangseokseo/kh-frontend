@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>khTest</title>
+    <style>
+        .test{
+            width: 200px;
+            height: 200px;
+            background-color: orangered;
+            position: relative; /*relative해놔야 offset값이 적용된다*/
+        }
+    
+        </style>
+
+</head>
+<body>
+<div id="cloneTest">
+    <div id="test1" class="test">
+            <button class="copy">복사하기</button>
+            <button class="delete"">삭제하기</button>
+    </div>
+</div>
+<div id="result"></div>
+
+<script>
+    $(function(){
+        $(test1).click(function(){
+            //clone() : 요소의 틀만 복사(이벤트, 데이터 정보는 복사x)
+            //clone(true/false) : true: 요소의 모든 내용 복사
+            //                    false : 기본값과 동일
+            $(this).parent().clone(true).appendTo('#result');
+        });
+    });
+
+    
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector</title>
+    <script src="js/jquery-3.5.1.js"></script><!--없으면 안됨!! 임포트해야 제이쿼리사용가능-->
+    <script>
+        $(function(){
+          console.log("hello~");
+        });
+    </script>
+</head>
+<body>
+    <h1>선택자</h1>
+    <!-- div.wrap>p{테스트$}*5 -->
+    <div class="wrap">
+        <p class="group1">테스트1</p>
+        <p class="group1">테스트2</p>
+        <p id="p3">테스트3</p>
+        <div class="container">
+            <p class="group2">테스트4</p>
+            <p class="group2">테스트5</p>
+        </div>
+    </div>
+    <input type="button" value="tag" id="btn1">
+    <input type="button" value="class" id="btn2">
+    <input type="button" value="id" id="btn3">
+    <input type="button" value="parent child" id="btn4">
+    <input type="button" value="parent > child" id="btn5">
+
+    <script>
+    /**
+     * $함수 문자열로 담기고.css로 꾸민다
+     */
+    btn5.addEventListener('click', function(){
+    //.wrap 직계 자식 p
+    $(".wrap > p").css("text-decoration", "underline");
+    });
+
+    btn4.addEventListener('click', function(){
+        //.wrap 하위의 모든 p
+        //css에 객체 전달 가능. -이 포함된 css속성명은 문자열로 처리할것.
+        $(".wrap p").css({
+        color : "red",
+        "text-decoration" : "underline"
+        });
+    });
+
+    btn3.addEventListener('click', function(){
+        $("#p3").css("border", "1px solid red");
+    }); 
+
+
+    btn2.onclick = function(){//선택자 $ 다음에 써라
+      $(".group1").css("background-color", "springgreen");
+
+      //method chaining
+      var $group2 =  $(".group2");
+      console.log($group2);
+      $group2//제이쿼리 객체를 리턴(밑의 메소드를 계속 실행가능)
+          .css("color", "orange")
+          .css("font-size", "24px");
+    };
+    /**
+     * $("css선택자")
+     * 
+     */
+    btn1.onclick = function(){
+        var $pArr = $("p");
+        console.log($pArr);//jquery 객체 : jQuery.fn.init(5) [p.group1, p.group1, p#p3, p.group2, p.group2, prevObject: jQuery.fn.init(1)]
+
+        //jquery객체에 css적용시, 각 요소에 자동으로 적용된다. color자리에 font-size등 자유롭게 넣어라
+        $pArr.css("color", "hotpink");//css적용 하나 하나 스타일 값 먹여줌
+
+        //vanilla js 자바스크립트(제이쿼리와 비교해서 코드가 줄어들었다)
+        // var arr = document.querySelectorAll("p");//유사배열은 for..in문 불가.일반 포문으로써
+        // for(var i = 0; i < arr.length; i++){
+        //     arr[i].style.backgroundColor = "navy";
+        // }   
+
+    };
+    </script>
+    
+    <h2>Pseudo 가상선택자</h2>
+    <div class="box">
+        <!-- ul>li{테스트$}*3 -->
+        <ul>
+            <li>테스트1</li>
+            <li>테스트2</li>
+            <li>테스트3</li>
+            <li><a href="">테스트4</a></li>
+        </ul>
+    </div>
+    <input type="button" value="순서" id="btn9">
+    <!--함수형태의 선택자 과제-->
+    <input type="button" value=":eq()" id="btn10">
+    <input type="button" value=":lt()" id="btn11">
+    <input type="button" value=":gt()" id="btn12">
+    <!--01.25시작-->
+    <input type="button" value=":has()" id="btn13">
+    <input type="button" value=":contains()" id="btn14">
+    <input type="button" value=":not()" id="btn15">
+
+    <!--css선택자랑 jquery선택자랑 비슷한게 많지만 jquery선택자에서는 input:button가능하고 css선택자는 input[type=button]이다. 주의-->
+    <script>
+    /**
+     * not ~ 이 아닌
+     */
+     $(btn15).click(function(){
+        $(".box li:not(:eq(2))")
+        .css("text-decoration", "underline")
+        .css("color", "red");
+  });
+
+    /**
+     * contains(문자열)
+     *  해당문자열을 가진태그
+     */
+    $(btn14).click(function(){
+        $(".box li:contains('트4')").css("font-size","2em");
+    });
+
+    /**
+     * :has(선택자)
+     * .box li: 박스 하위에있는 리스트중에~
+     */
+    //선택자 아니고 객체를 준것이라는 의미. #btn13말고 btn13넣은 의미는
+    $(btn13).click(function(){
+        $(".box li:has(a)").css("background-color", "hotpink");
+    });
+
+
+    $(btn10).click(function(){//과제 10,11,12 답
+        $(".box li:eq(1)").css("font-family", "궁서, cursive");
+    });
+    $(btn11).click(function(){
+        $(".box li:lt(3)").css("color", "springgreen");
+    });
+    $(btn12).click(function(){
+        $(".box li:gt(1)").css("text-decoration", "line-through");
+    });
+
+    $("#btn9").click(function(){
+        console.log($(".box li"));
+        // $(".box li:first").css("color", "orangered");
+        // $(".box li:last").css("background-color", "orangered");
+        // $(".box li:odd").css("background-color", "orangered");//0번지 테스트1~ 3번지 테스트4 중 1,3번지 선택 odd홀수
+        $(".box li:even").css("background-color", "orangered");//0번지 테스트1~ 3번지 테스트4 중 2,4번지 선택 even짝수
+        
+    });
+
+    </script>
+</body>
+</html>

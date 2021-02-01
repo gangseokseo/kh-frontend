@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Animate</title>
+    <script src="js/jquery-3.5.1.js"></script>
+    <script src="js/jquery.color-2.1.2.js"></script>
+    <!--"background-color": "gray" 먹이기위해서 ="js/jquery.color-2.1.2.js" 컬러플러그인하기-->
+    <script src="js/jquery.easing.1.3.js"></script>
+    <!--애니메이션 효과 주기위해서 easing 플러그인-->
+    <!--https://gsgd.co.uk/sandbox/jquery/easing/ 에서 다운-->
+    <style>
+    .test{
+        width: 200px;
+        height: 200px;
+        background-color: orangered;
+        position: relative; /*relative해놔야 offset값이 적용된다-> left옮기기가능*/
+    }
+
+    </style>
+</head>
+<body>
+    <h1>CSS Animate</h1>
+    <h2>animate</h2>
+    <input type="button" value="실행" id="btn1">
+    <br><br>
+    <div class="test"></div>
+    <script>
+    /**
+     * animate(styleObj, speed, easing, callbackFunction(){})
+     *                          swing 속도곡선 빠르게
+     */
+    $(btn1).click(function(){
+
+
+      $(".test").animate({ //애니메이트함수 호출
+        width: "500px",
+        height: "500px",
+        left : "500px", //position: relative;로 offset값적용
+        "background-color": "gray"  
+      }, 1000, 'easeOutBounce' , function(){//swing 썼던곳에 easeOutBounce 효과쓰기("js/jquery.easing.1.3.js")맨위에 쓰기
+        // alert("animate적용완료!");//마지막 콜백함수
+        $(this).fadeOut(500, function(){//콜백함수 추가
+          $(this)
+           .css("left", "0px")
+           .fadeIn(1000);
+
+       });
+      });
+
+    });
+
+    </script>
+
+
+</body>
+</html>
